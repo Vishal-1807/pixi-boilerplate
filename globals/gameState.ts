@@ -9,6 +9,10 @@ let gameStartedListeners: (() => void)[] = [];
 let gameEndedListeners: (() => void)[] = [];
 let balanceChangeListeners: ((newBalance: number) => void)[] = [];
 
+// Pending game restoration listeners
+let pendingGameRestoreListeners: Array<() => void> = [];
+let pendingGameRestoreCompleteListeners: Array<() => void> = [];
+
 // Layout constants
 const DEFAULT_ROWS = 6;
 const DEFAULT_COLS = 5;
@@ -208,6 +212,36 @@ const getToken = () => {
     return GlobalState.token;
 }
 
+// Function to add pending game restore listener
+const addPendingGameRestoreListener = (listener: () => void) => {
+    pendingGameRestoreListeners.push(listener);
+    console.log(`Added pending game restore listener. Total listeners: ${pendingGameRestoreListeners.length}`);
+
+    // Return unsubscribe function
+    return () => {
+        const index = pendingGameRestoreListeners.indexOf(listener);
+        if (index > -1) {
+            pendingGameRestoreListeners.splice(index, 1);
+            console.log(`Removed pending game restore listener. Remaining listeners: ${pendingGameRestoreListeners.length}`);
+        }
+    };
+};
+
+// Function to add pending game restore completion listener
+const addPendingGameRestoreCompleteListener = (listener: () => void) => {
+    pendingGameRestoreCompleteListeners.push(listener);
+    console.log(`Added pending game restore complete listener. Total listeners: ${pendingGameRestoreCompleteListeners.length}`);
+
+    // Return unsubscribe function
+    return () => {
+        const index = pendingGameRestoreCompleteListeners.indexOf(listener);
+        if (index > -1) {
+            pendingGameRestoreCompleteListeners.splice(index, 1);
+            console.log(`Removed pending game restore complete listener. Remaining listeners: ${pendingGameRestoreCompleteListeners.length}`);
+        }
+    };
+};
+
 // Function to trigger pending game restore (placeholder for extensibility)
 const triggerPendingGameRestore = () => {
     console.log('Triggering pending game restore');
@@ -263,5 +297,7 @@ export const GlobalState = {
     getReward,
     
     // Extensibility placeholders
+    addPendingGameRestoreListener,
+    addPendingGameRestoreCompleteListener,
     triggerPendingGameRestore,
 };
