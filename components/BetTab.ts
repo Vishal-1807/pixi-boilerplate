@@ -220,18 +220,6 @@ const createBetTab = (appWidth: number, appHeight: number) => {
     };
 
     // Create buttons
-    const minusBetButton = createButton({
-        texture: Assets.get('betTabMinus'),
-        width: 50,
-        height: 50,
-        x: 0,
-        y: 0,
-        anchorX: 0,
-        anchorY: 0,
-        onClick: handleBetDecrease
-    });
-    container.addChild(minusBetButton);
-
     const betTab = createButton({
         texture: Assets.get('betTab'),
         width: 100,
@@ -244,11 +232,23 @@ const createBetTab = (appWidth: number, appHeight: number) => {
     });
     container.addChild(betTab);
 
+    const minusBetButton = createButton({
+        texture: Assets.get('betTabMinus'),
+        width: 50,
+        height: 50,
+        x: betTab.x - 50,
+        y: 0,
+        anchorX: 0,
+        anchorY: 0,
+        onClick: handleBetDecrease
+    });
+    container.addChild(minusBetButton);
+
     const plusBetButton = createButton({
         texture: Assets.get('betTabPlus'),
         width: 50,
         height: 50,
-        x: 150,
+        x: betTab.x + betTab.width + 50,
         y: 0,
         anchorX: 0,
         anchorY: 0,
